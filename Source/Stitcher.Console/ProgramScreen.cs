@@ -36,8 +36,9 @@ namespace Stitcher.CommandLine
 
         public void PrintHeader(string appName, string appVersion)
         {
-            Console.WriteLine("\t\t\t{0} \t {1}", appName, appVersion);
-            Console.WriteLine("--------------------------------------------------------------------------------");
+            string name = string.Format("{0}   {1}", appName, appVersion);
+            Console.WriteLine(name);
+            Console.WriteLine("".PadRight(name.Length, '-'));
         }
 
         public void ShowProgress(float progress)
@@ -57,7 +58,7 @@ namespace Stitcher.CommandLine
             Console.CursorLeft = 0;
             if (colorReversed)
                 ReverseColors();
-            Console.Write(message);
+            Console.WriteLine(message);
 
             if (waitForKeyPressed)
                 Console.ReadKey();

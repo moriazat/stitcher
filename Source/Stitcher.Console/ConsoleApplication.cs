@@ -46,9 +46,19 @@ namespace Stitcher.CommandLine
 
             TimeSpan duration = Stitch();
 
+            this.screen.PrintMessage(string.Format("<{0}> Appended", currFile));
+            Summarize(duration);
+        }
+
+        private void Summarize(TimeSpan duration)
+        {
+            this.screen.PrintMessage(string.Empty);
+            this.screen.PrintMessage(
+                string.Format("Stitching {0} files completed successfully.", bundle.SourceFilesCount));
+            this.screen.PrintMessage(
+                string.Format("Duration: {0:00}:{1:00}.{2:##} min.", duration.Minutes, duration.Seconds, duration.Milliseconds));
             this.screen.PrintFinalMessage(
-                string.Format("Stitching {0} files completed successfully in {1}.", bundle.SourceFilesCount, duration),
-                true);
+                string.Format("Total bytes written: {0:#,#}", bundle.DestinationFileSize), false);
         }
 
         private TimeSpan Stitch()
