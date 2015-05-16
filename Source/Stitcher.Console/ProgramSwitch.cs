@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Stitcher.CommandLine
 {
-    struct ProgramSwitch
+    class ProgramSwitch
     {
         private string switchFormat;
         private string alternateFormat;

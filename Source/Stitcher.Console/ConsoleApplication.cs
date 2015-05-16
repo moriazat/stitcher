@@ -35,7 +35,6 @@ namespace Stitcher.CommandLine
             if (arguments.AskedForHelp)
             {
                 ShowHelp();
-                Console.ReadKey();
                 return ;
             }
 

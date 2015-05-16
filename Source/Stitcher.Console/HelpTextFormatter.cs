@@ -125,12 +125,7 @@ namespace Stitcher.CommandLine
         {
             int maxLinesCount;
             int maxAllowedRightColSize = SCREEN_WIDTH - this.middlePadSize;
-            StringBuilder sb = new StringBuilder();
-            string emptyPadding = string.Empty.PadLeft(this.middlePadSize);
-
-            List<string> leftCol = new List<string>();
             string[] descLines = GetDescriptionLines(ps.Description, maxAllowedRightColSize);
-            List<string> rightCol = new List<string>(descLines);
 
             if (descLines.Length > 1)
                 maxLinesCount = descLines.Length;
@@ -139,34 +134,15 @@ namespace Stitcher.CommandLine
             else
                 maxLinesCount = 1;
 
-            leftCol.Add(CreateLeftColumn(ps.PrimaryFormat));
+            string[] leftCol = CreateLeftColumn(maxLinesCount, ps);
+            string[] rightCol = CreateRightColumn(maxLinesCount, descLines);
 
-            if (maxLinesCount > 1)
-            {
-                Debug.Assert(ps.AlternateFormat != null,
-                    "ProgramSwitch.AlternateFormat shouldn't be null.");
-                leftCol.Add(CreateLeftColumn(ps.AlternateFormat));
-                if (maxLinesCount > 2)
-                    for (int i = 0; i < maxLinesCount - 2; i++)
-                        leftCol.Add(emptyPadding);
-            }
+            string table = CreateTable(leftCol, rightCol);
 
-            if (maxLinesCount > rightCol.Count)
-            {
-                for (int i = 0; i < maxLinesCount - rightCol.Count; i++)
-                    rightCol.Add(string.Empty);
-            }
-
-            for (int i = 0; i < maxLinesCount; i++)
-            {
-                sb.Append(leftCol[i]);
-                sb.AppendLine(rightCol[i]);
-            }
-
-            return sb.ToString();
+            return table;
         }
 
-        private string CreateLeftColumn(string content)
+        private string CreateLeftCell(string content)
         {
             string col = LEFT_PAD + content;
             col = col.PadRight(this.middlePadSize);
@@ -206,6 +182,51 @@ namespace Stitcher.CommandLine
             }
 
             return lines.ToArray();
+        }
+
+        private string[] CreateLeftColumn(int cellsCount, ProgramSwitch ps)
+        {
+            List<string> column = new List<string>();
+            string emptyPadding = string.Empty.PadLeft(this.middlePadSize);
+
+            column.Add(CreateLeftCell(ps.PrimaryFormat));
+
+            if (cellsCount> 1)
+            {
+                Debug.Assert(ps.AlternateFormat != null, "ProgramSwitch.AlternateFormat shouldn't be null.");
+                column.Add(CreateLeftCell(ps.AlternateFormat));
+                if (cellsCount > 2)
+                    for (int i = 0; i < cellsCount - 2; i++)
+                        column.Add(emptyPadding);
+            }
+
+            return column.ToArray();
+        }
+
+        private string[] CreateRightColumn(int cellsCount, string[] currCells)
+        {
+            List<string> column = new List<string>(currCells);
+
+            if (cellsCount > currCells.Length)
+            {
+                for (int i = 0; i < cellsCount - column.Count; i++)
+                    column.Add(string.Empty);
+            }
+
+            return column.ToArray();
+        }
+
+        private string CreateTable(string[] leftColumn, string[] rightColumn)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < leftColumn.Length; i++)
+            {
+                sb.Append(leftColumn[i]);
+                sb.AppendLine(rightColumn[i]);
+            }
+
+            return sb.ToString();
         }
     }
 }
