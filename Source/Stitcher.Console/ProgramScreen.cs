@@ -36,7 +36,7 @@ namespace Stitcher.CommandLine
 
         public void PrintHeader(string appName, string appVersion)
         {
-            string name = string.Format("{0}   {1}", appName, appVersion);
+            string name = string.Format("{0}  [{1}]", appName, appVersion);
             Console.WriteLine(name);
             Console.WriteLine("".PadRight(name.Length, '-'));
         }

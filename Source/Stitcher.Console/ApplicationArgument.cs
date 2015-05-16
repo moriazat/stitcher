@@ -108,7 +108,8 @@ namespace Stitcher.CommandLine
             HelpTextFormatter formatter = new HelpTextFormatter();
             formatter.ProgramName = Program.Name;
             formatter.ProgramVersion = Program.GetVersion();
-            formatter.CopyrightMessage = "Copyright Mohammad Riazat";
+            formatter.CopyrightMessage = 
+                string.Format("Copyright (c) 2015 Mohammad Riazat. {0}Released under The MIT License.", Environment.NewLine);
             formatter.CommandSynopsis = "STITCH /source:files [/dest:file] [/inplace]";
 
             formatter.AddSwitch(
